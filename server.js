@@ -1,18 +1,12 @@
+var server = require("./index");
+var router = require("./router");
+var requestHandlers = require("./handlers");
 
+var handle = {}
 
-var http = require("http");
-var url = require("url");
-var formidable = require("formidable");
+handle["/"] = requestHandlers.start;
+handle["/start"] = requestHandlers.start;
+handle["/upload"] = requestHandlers.upload;
+handle["/show"] = requestHandlers.show;
 
-function start(route, handle) {
-  function onRequest(request, response) {
-    var pathname = url.parse(request.url).pathname;
-    console.log("Request for " + pathname + " received.");
-    route(handle, pathname, response, request);
-  }
-
-  http.createServer(onRequest).listen(8888);
-  console.log("Server has started.");
-}
-
-exports.start = start;
+server.start(router.route, handle);
